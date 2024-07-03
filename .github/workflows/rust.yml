@@ -12,6 +12,8 @@ env:
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.increment_version.outputs.new_version }}
     steps:
     - uses: actions/checkout@v4
     - name: Set up Git
@@ -29,7 +31,7 @@ jobs:
         minor=$(echo $version | cut -d. -f2)
         patch=$(echo $version | cut -d. -f3)
         new_version="v$major.$minor.$((patch + 1))"
-        echo "new_version=$new_version" >> $GITHUB_ENV
+        echo "::set-output name=new_version::$new_version"
     - name: Build for Linux
       run: cargo build --release --target x86_64-unknown-linux-gnu
     - name: Package for Release (Linux)
@@ -42,6 +44,9 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
+    needs: build-linux
+    outputs:
+      new_version: ${{ needs.build-linux.outputs.new_version }}
     steps:
     - uses: actions/checkout@v4
     - name: Set up Git
@@ -59,7 +64,7 @@ jobs:
         $version = $latestTag.TrimStart('v')
         $major, $minor, $patch = $version -split '\.'
         $newVersion = "v$major.$minor.$($patch + 1)"
-        echo "new_version=$newVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
+        echo "::set-output name=new_version::$newVersion"
     - name: Build for Windows
       run: cargo build --release --target x86_64-pc-windows-msvc
     - name: List Build Output
@@ -99,10 +104,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.new_version }}
-        release_name: Release ${{ env.new_version }}
+        tag_name: ${{ needs.build-linux.outputs.new_version }}
+        release_name: Release ${{ needs.build-linux.outputs.new_version }}
         body: |
-          Release notes for ${{ env.new_version }}
+          Release notes for ${{ needs.build-linux.outputs.new_version }}
           Added windows, Removed mac, source code, targets folders and integrations and kept bimble the command and changed fork and recreated from ground up and updated repo and added readme file
         draft: false
         prerelease: false
