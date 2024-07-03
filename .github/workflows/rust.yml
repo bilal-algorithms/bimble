@@ -62,15 +62,17 @@ jobs:
         echo "new_version=$newVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
     - name: Build for Windows
       run: cargo build --release --target x86_64-pc-windows-msvc
+    - name: List Build Output
+      run: dir target\x86_64-pc-windows-msvc\release
     - name: Verify Build Output
       run: |
-        if (!(Test-Path -Path target\x86_64-pc-windows-msvc\release\bimble)) {
-          Write-Error "Build output not found: target\x86_64-pc-windows-msvc\release\bimble"
+        if (!(Test-Path -Path target\x86_64-pc-windows-msvc\release\bimble.exe)) {
+          Write-Error "Build output not found: target\x86_64-pc-windows-msvc\release\bimble.exe"
           exit 1
         }
     - name: Package for Release (Windows)
       run: |
-        powershell Compress-Archive -Path target\x86_64-pc-windows-msvc\release\bimble -DestinationPath bimble_windows.zip
+        powershell Compress-Archive -Path target\x86_64-pc-windows-msvc\release\bimble.exe -DestinationPath bimble_windows.zip
     - name: Upload Artifact (Windows)
       uses: actions/upload-artifact@v3
       with:
