@@ -12,6 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Set up Git
+      run: git fetch --prune --unshallow
+    - name: Get Latest Tag
+      id: get_latest_tag
+      run: echo "latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
+    - name: Increment Version
+      id: increment_version
+      run: |
+        latest_tag=${{ env.latest_tag }}
+        echo "Latest tag: $latest_tag"
+        version=${latest_tag#v}
+        major=$(echo $version | cut -d. -f1)
+        minor=$(echo $version | cut -d. -f2)
+        patch=$(echo $version | cut -d. -f3)
+        new_version="v$major.$minor.$((patch + 1))"
+        echo "new_version=$new_version" >> $GITHUB_ENV
     - name: Build for Linux
       run: cargo build --release --target x86_64-unknown-linux-gnu
     - name: Package for Release (Linux)
@@ -26,10 +42,27 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Set up Git
+      run: git fetch --prune --unshallow
+    - name: Get Latest Tag
+      id: get_latest_tag
+      run: echo "latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
+    - name: Increment Version
+      id: increment_version
+      run: |
+        latest_tag=${{ env.latest_tag }}
+        echo "Latest tag: $latest_tag"
+        version=${latest_tag#v}
+        major=$(echo $version | cut -d. -f1)
+        minor=$(echo $version | cut -d. -f2)
+        patch=$(echo $version | cut -d. -f3)
+        new_version="v$major.$minor.$((patch + 1))"
+        echo "new_version=$new_version" >> $GITHUB_ENV
     - name: Build for Windows
       run: cargo build --release --target x86_64-pc-windows-msvc
     - name: Package for Release (Windows)
-      run: zip -r bimble_windows.zip target/x86_64-pc-windows-msvc/release/bimble
+      run: |
+        powershell Compress-Archive -Path target\x86_64-pc-windows-msvc\release\bimble -DestinationPath bimble_windows.zip
     - name: Upload Artifact (Windows)
       uses: actions/upload-artifact@v3
       with:
@@ -56,10 +89,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v1.0.1
-        release_name: Release v1.0.1
+        tag_name: ${{ env.new_version }}
+        release_name: Release ${{ env.new_version }}
         body: |
-          Release notes for v1.0.1
+          Release notes for ${{ env.new_version }}
           Added windows, Removed mac, source code, targets folders and integrations and kept bimble the command and changed fork and recreated from ground up and updated repo and added readme file
         draft: false
         prerelease: false
