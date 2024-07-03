@@ -1,3 +1,5 @@
+name: Rust
+
 on:
   push:
     branches: [ "master" ]
@@ -13,18 +15,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Build for Linux
       run: cargo build --release --target x86_64-unknown-linux-gnu
-    
+
     - name: Build for Windows
-      run: cargo build --release --target x86_64-pc-windows-msvc
+      runs-on: windows-latest
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust for Windows
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: stable-x86_64-pc-windows-msvc
+
+      - name: Build for Windows
+        run: cargo build --release --target x86_64-pc-windows-msvc
 
     - name: Package for Release
       run: |
         zip -r bimble_linux.zip target/x86_64-unknown-linux-gnu/release/bimble
-        zip -r bimble_windows.zip target/x86_64-pc-windows-msvc/release/bimble
+        zip -r bimble_windows.zip target/x86_64-pc-windows-msvc/release/bimble.exe
 
     - name: Create Release
       id: create_release
@@ -41,8 +55,8 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Release Asset
-      id: upload-release-asset
+    - name: Upload Release Asset (Linux)
+      id: upload-release-asset-linux
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,8 +66,8 @@ jobs:
         asset_name: bimble_linux.zip
         asset_content_type: application/zip
 
-    - name: Upload Release Asset
-      id: upload-release-asset
+    - name: Upload Release Asset (Windows)
+      id: upload-release-asset-windows
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
