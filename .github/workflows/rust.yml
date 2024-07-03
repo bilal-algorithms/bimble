@@ -1,3 +1,5 @@
+name: CI
+
 on:
   push:
     branches: ["master"]
@@ -60,6 +62,12 @@ jobs:
         echo "new_version=$newVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
     - name: Build for Windows
       run: cargo build --release --target x86_64-pc-windows-msvc
+    - name: Verify Build Output
+      run: |
+        if (!(Test-Path -Path target\x86_64-pc-windows-msvc\release\bimble)) {
+          Write-Error "Build output not found: target\x86_64-pc-windows-msvc\release\bimble"
+          exit 1
+        }
     - name: Package for Release (Windows)
       run: |
         powershell Compress-Archive -Path target\x86_64-pc-windows-msvc\release\bimble -DestinationPath bimble_windows.zip
