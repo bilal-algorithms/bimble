@@ -1,9 +1,17 @@
 [package]
-name = "bimble"
-version = "0.8.0"
+name = "Bimble"
+version = "1.0.0"
 edition = "2021"
 authors = ["Virtua-Startups"]
 description = "The bimble programming language"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = 'abort'
+
+
 
 [dependencies]
 clearscreen = "3.0.0"
