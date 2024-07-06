@@ -32,7 +32,7 @@ jobs:
       - name: Build for Linux
         run: cargo build --release --target x86_64-unknown-linux-gnu
       - name: Package for Release (Linux)
-        run: zip -r bimble_linux.zip target/x86_64-unknown-linux-gnu/release/bimble
+        run: zip -r bimble_linux.zip . -i target/x86_64-unknown-linux-gnu/release/bimble
       - name: Upload Artifact (Linux)
         uses: actions/upload-artifact@v3
         with:
