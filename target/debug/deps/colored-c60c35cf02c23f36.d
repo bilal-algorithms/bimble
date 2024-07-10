@@ -1,0 +1,12 @@
+E:\projects\rust\bimble\target\debug\deps\libcolored-c60c35cf02c23f36.rmeta: C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\lib.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\color.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\control.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\error.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\style.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\customcolors.rs
+
+E:\projects\rust\bimble\target\debug\deps\libcolored-c60c35cf02c23f36.rlib: C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\lib.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\color.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\control.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\error.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\style.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\customcolors.rs
+
+E:\projects\rust\bimble\target\debug\deps\colored-c60c35cf02c23f36.d: C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\lib.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\color.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\control.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\error.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\style.rs C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\customcolors.rs
+
+C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\lib.rs:
+C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\color.rs:
+C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\control.rs:
+C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\error.rs:
+C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\style.rs:
+C:\Users\jay\.cargo\registry\src\index.crates.io-6f17d22bba15001f\colored-2.1.0\src\customcolors.rs:

@@ -1,4 +1,6 @@
 ON main(){
-    may i = 1;
-    add(1,1,i,"hello world":i);
+    may name = "name";
+    echoln("my name is ",name);
+    may idea = 1;
+    echo("idea ",idea," name ",name);
 }
