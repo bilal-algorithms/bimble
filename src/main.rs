@@ -477,11 +477,7 @@ fn main() {
                             } else if line.trim() == "out.flush();" {
                                 println!("{} {}", "buffer flusher called here : ", line.trim());
                             } else if line.trim().starts_with("echo") {
-                                println!(
-                                    "{}{}",
-                                    "Handling 'echo' - ".green(),
-                                    line.trim().green()
-                                );
+                                println!("{}{}", "Handling 'echo' - ".green(), line.trim().green());
 
                                 let enlrg = Regex::new(r#"echo\((.*?)\)\;"#).unwrap();
                                 if let Some(cap) = enlrg.captures(line) {
@@ -536,6 +532,20 @@ fn main() {
                                     println!("{}", "CANCELLING BUILD".blink().blue());
                                     exit(0);
                                 }
+                            } else if line.trim().starts_with("#") {
+                                if !isinfn {
+                                    println!(
+                                        "{}{}",
+                                        "Comment Not going in final build : ",
+                                        line.trim()
+                                    );
+                                } else {
+                                    println!(
+                                        "{}{}",
+                                        "Comment Not going in final build : ",
+                                        line.trim()
+                                    );
+                                }
                             } else if line.trim().is_empty() {
                                 continue;
                             } else {
@@ -551,6 +561,7 @@ fn main() {
                                         break;
                                     }
                                 }
+
                                 if !found_function_call {
                                     undefined_fn_calls.push(line.trim().to_string());
                                     println!(
@@ -623,6 +634,7 @@ fn main() {
                                             File::open(tempfol.to_owned() + "/vstartups.txt")
                                                 .unwrap();
                                         f.read_to_string(&mut lcd).unwrap();
+                                        //dbg!(lcd.clone());
 
                                         if Path::exists(Path::new(
                                             &(project_folder.to_owned() + "/cfg.bcf"),
@@ -665,6 +677,18 @@ fn main() {
                                                             continue;
                                                         }
                                                     }
+                                                    let mut newcd = String::new();
+                                                    for i in lcd.clone().split("\n") {
+                                                        let i = i.trim();
+                                                        //dbg!(i);
+                                                        if !i.starts_with("#") {
+                                                            newcd.push_str(
+                                                                format!("\n{}", i).as_str(),
+                                                            );
+                                                        }
+                                                    }
+                                                    let lcd = newcd;
+                                                    //dbg!("lcd : {}", lcd.clone());
                                                     // After creating `topacc`
                                                     let topacc =
                                                         format!("{}@{}", CFG::gen(c.clone()), lcd);
