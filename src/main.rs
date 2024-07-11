@@ -468,7 +468,7 @@ fn main() {
                                 } else {
                                     println!(
                                         "{}{}",
-                                        "Invalid 'echonl()' syntax :: ".red(),
+                                        "Invalid 'echoln()' syntax :: ".red(),
                                         line.trim().red()
                                     );
                                     println!("{}", "CANCELLING BUILD".blink().blue());
@@ -479,7 +479,7 @@ fn main() {
                             } else if line.trim().starts_with("echo") {
                                 println!(
                                     "{}{}",
-                                    "Handling 'echol' - ".green(),
+                                    "Handling 'echo' - ".green(),
                                     line.trim().green()
                                 );
 
@@ -514,7 +514,7 @@ fn main() {
                                                         "{}{}{}{}",
                                                         "Variable not found in scope: ".red(),
                                                         text.red(),
-                                                        " in echol statement: ".red(),
+                                                        " in echo statement: ".red(),
                                                         line.trim().red()
                                                     );
                                                     exit(0);
@@ -530,7 +530,7 @@ fn main() {
                                 } else {
                                     println!(
                                         "{}{}",
-                                        "Invalid 'echol()' syntax :: ".red(),
+                                        "Invalid 'echo()' syntax :: ".red(),
                                         line.trim().red()
                                     );
                                     println!("{}", "CANCELLING BUILD".blink().blue());
