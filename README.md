@@ -7,5 +7,7 @@
   - ***Elie Khalil*** -> Managing GIT and Mac Ports
   - ***Gikado*** -> Managing Finances
   - ***Akshat Raj*** -> Making the tutorial video
+
+[License](LICENSE.md)
 ![Bimble logo](./assets/logo.png)
 
