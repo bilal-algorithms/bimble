@@ -1,7 +1,6 @@
 # Bimble Programming Language
 
-![Bimble logo](./assets/logo.png)
-
+<img src="./assets/logo.png" alt="Bimble logo" width="200">
 ## Credits
 
 - The awesome work from people at Virtua Startups:
