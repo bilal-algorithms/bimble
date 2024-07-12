@@ -173,7 +173,14 @@ fn main() {
                                         );
                                     }
                                 }
-                            } else if line.trim().starts_with("add") {
+                            } 
+                            else if line.starts_with("if"){
+                                let ifrg = Regex::new(r#"if\[(.*?)\]=>(.*?);"#).unwrap();
+                                if let Some(cap) = ifrg.captures(line.trim()){
+                                    
+                                }
+                            }
+                            else if line.trim().starts_with("add") {
                                 println!("{}", "Handling addition method".green());
                                 //let mut fval = String::new();
                                 match Regex::new(r"add\((.*?)\);") {
