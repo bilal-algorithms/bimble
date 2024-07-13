@@ -173,19 +173,41 @@ fn main() {
                                         );
                                     }
                                 }
-                            } 
-                            else if line.starts_with("if"){
-                                let ifrg = Regex::new(r#"if\[(.*?)\]=>(.*?);"#).unwrap();
-                                if let Some(cap) = ifrg.captures(line.trim()){
-                                    
+                            } else if line.trim().starts_with("if") {
+                                let ifrg =
+                                    Regex::new(r#"if\s*\[(.*?)\]\s*=>\s*(.*?);\s*"#).unwrap();
+                                if let Some(cap) = ifrg.captures(line.trim()) {
+                                    if cap.len() != 3 {
+                                        if cap.get(1).is_none() || cap.get(1).unwrap().is_empty(){
+
+                                            println!("{}{}","ERR - The Conditional Statement is missing a condition for it please check :-> ".red().bold(),line.trim().red().bold());
+                                        }
+                                        else if cap.get(2).is_none()|| cap.get(1).unwrap().is_empty(){
+                                            println!("{}{}","ERR - The Conditional Statement is missing a method call for it please check :-> ".red().bold(),line.trim().red().bold());
+
+                                        }
+                                        else{
+                                            continue;
+                                        }
+                                    }
+                                    println!(
+                                        "Condition -> {} , Method Call -> {}",
+                                        cap.get(1).unwrap().as_str(),
+                                        cap.get(2).unwrap().as_str()
+                                    );
+                                    let cnd = cap.get(1).unwrap().as_str();
+
                                 }
-                            }
-                            else if line.trim().starts_with("add") {
+                                else{
+                                    println!("{}{}","ERR - Conditional Statement syntax is wrong : ".red().bold(),line.trim().red().bold());
+                                    exit(0);
+                                }
+                            } else if line.trim().starts_with("add") {
                                 println!("{}", "Handling addition method".green());
                                 //let mut fval = String::new();
                                 match Regex::new(r"add\((.*?)\);") {
                                     Ok(addrg) => {
-                                        println!("add regex - {:?}", addrg);
+                                        //println!("add regex - {:?}", addrg);
                                         if let Some(cap) = addrg.captures(line.trim()) {
                                             match cap.get(1) {
                                                 Some(dat) => {
@@ -202,35 +224,35 @@ fn main() {
                                                             let exprs = args.split(",");
                                                             for expr in exprs {
                                                                 let mut ex = false; // Reset ex for each expr
-                                                                dbg!(expr);
+                                                                                    // dbg!(expr);
                                                                 if expr.parse::<i128>().is_ok() {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched i128 in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    // println!(
+                                                                    //     "matched i128 in expt : {}",
+                                                                    //     expr
+                                                                    // );
                                                                 } else if expr
                                                                     .parse::<f64>()
                                                                     .is_ok()
                                                                 {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched f64 in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    // println!(
+                                                                    //     "matched f64 in expt : {}",
+                                                                    //     expr
+                                                                    // );
                                                                 } else if expr.starts_with("\"")
                                                                     && expr.ends_with("\"")
                                                                 {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched txt in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    // println!(
+                                                                    //     "matched txt in expt : {}",
+                                                                    //     expr
+                                                                    // );
                                                                 } else {
                                                                     for i in vrs.clone() {
                                                                         if i.name == expr {
                                                                             ex = true;
-                                                                            println!("matched var in expt : {}", expr);
+                                                                            // println!("matched var in expt : {}", expr);
                                                                             break;
                                                                             // Exit the loop once a match is found
                                                                         }
@@ -293,35 +315,35 @@ fn main() {
                                                             let exprs = args.split(",");
                                                             for expr in exprs {
                                                                 let mut ex = false; // Reset ex for each expr
-                                                                dbg!(expr);
+                                                                                    //dbg!(expr);
                                                                 if expr.parse::<i128>().is_ok() {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched i128 in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    //println!(
+                                                                    //    "matched i128 in expt : {}",
+                                                                    //    expr
+                                                                    //);
                                                                 } else if expr
                                                                     .parse::<f64>()
                                                                     .is_ok()
                                                                 {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched f64 in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    //println!(
+                                                                    //     "matched f64 in expt : {}",
+                                                                    //     expr
+                                                                    // );
                                                                 } else if expr.starts_with("\"")
                                                                     && expr.ends_with("\"")
                                                                 {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched txt in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    // println!(
+                                                                    //     "matched txt in expt : {}",
+                                                                    //     expr
+                                                                    //);
                                                                 } else {
                                                                     for i in vrs.clone() {
                                                                         if i.name == expr {
                                                                             ex = true;
-                                                                            println!("matched var in expt : {}", expr);
+                                                                            //    println!("matched var in expt : {}", expr);
                                                                             break;
                                                                             // Exit the loop once a match is found
                                                                         }

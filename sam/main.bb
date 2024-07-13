@@ -5,4 +5,5 @@ ON main(){
     sub(z:z,10);
     echoln("value of z where z = 20 - 10 is -> ",z);
     echoln("value of i where i = 0 + 10 is -> ",i);
+    if [1>2] => ;
 }
