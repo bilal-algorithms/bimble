@@ -57,6 +57,7 @@ impl Dis for Varr {}
 
 #[allow(path_statements)]
 #[allow(unused_assignments)]
+#[allow(unused_variables)]
 fn main() {
     let mut vrs: Vec<Varr> = Vec::new();
     let mut undefined_fn_calls: Vec<String> = Vec::new();
@@ -173,12 +174,121 @@ fn main() {
                                         );
                                     }
                                 }
+                            } else if line.trim().starts_with("if") {
+                                let ifrg =
+                                    Regex::new(r#"if\s*\[(.*?)\]\s*=>\s*(.*?);\s*"#).unwrap();
+                                if let Some(cap) = ifrg.captures(line.trim()) {
+                                    if cap.len() != 3 {
+                                        if cap.get(1).is_none()
+                                            || cap.get(1).unwrap().as_str().trim().is_empty()
+                                        {
+                                            println!("{} {}", "ERR - The Conditional Statement is missing a condition:".red().bold(), line.trim().red().bold());
+                                            std::process::exit(1);
+                                        } else if cap.get(2).is_none()
+                                            || cap.get(2).unwrap().as_str().trim().is_empty()
+                                        {
+                                            println!("{} {}", "ERR - The Conditional Statement is missing a method call:".red().bold(), line.trim().red().bold());
+                                            std::process::exit(1);
+                                        } else {
+                                            continue;
+                                        }
+                                    }
+
+                                    // Extract condition and method call
+                                    //println!("cap -> {:?}",cap);
+                                    let cnd = cap.get(1).unwrap().as_str().trim();
+                                    let mthd = cap.get(2).unwrap().as_str().trim();
+
+                                    println!("Condition -> {}, Method Call -> {}", cnd, mthd);
+                                    let mthdd = mthd.trim_end_matches("()");
+                                   // let mut ex = false;
+                                       println!("fns : {:?} || mthdd : {} || mthd : {}",fns.clone(),mthdd,mthd);
+                                    // for i in fns.clone() {
+                                    //    if i == mthdd {
+                                    //        ex = true;
+                                    //    }
+                                   // }
+                                    //if !ex{
+                                        undefined_fn_calls.push(format!("{}();",mthdd));
+                                    //}
+                                    // Process condition characters
+                                    let mut last_char: Option<char> = None;
+                                    let cnds: Vec<char> = cnd.chars().collect();
+                                    for (index, cnd_char) in cnds.iter().enumerate() {
+                                        println!("cnd - {}", cnd_char);
+                                        let cnd_str = cnd_char.to_string();
+
+                                        // Check if the character represents a number, string, or empty
+                                        if cnd_str.is_empty() {
+                                            continue;
+                                        } else if cnd_str.parse::<f64>().is_ok() {
+                                            continue;
+                                        } else if cnd_str.parse::<i128>().is_ok() {
+                                            continue;
+                                        } else if cnd_str.starts_with('"') && cnd_str.ends_with('"')
+                                        {
+                                            continue;
+                                        }
+
+                                        // Check for operators and valid sequences
+                                        if let Some(last) = last_char {
+                                            match (last, cnd_char) {
+                                                ('=', '=') => {
+                                                    println!(
+                                                        "{} {}",
+                                                        "ERR - Consecutive '=' operators:"
+                                                            .red()
+                                                            .bold(),
+                                                        line.trim().red().bold()
+                                                    );
+                                                    std::process::exit(1);
+                                                }
+                                                ('&', '&') => {
+                                                    println!(
+                                                        "{} {}",
+                                                        "ERR - Consecutive '&&' operators:"
+                                                            .red()
+                                                            .bold(),
+                                                        line.trim().red().bold()
+                                                    );
+                                                    std::process::exit(1);
+                                                }
+                                                ('>', next) => {
+                                                    // let next = *next
+                                                    if *next == '='
+                                                        || next.is_numeric()
+                                                        || next.to_string().is_empty()
+                                                        || next.to_string().trim().is_empty()
+                                                    {
+                                                        // Valid continuation
+                                                    } else {
+                                                        println!("{} {} {} {}", "ERR - Invalid continuation after '>' operator : err (".red().bold(), next.to_string().red().bold() , ") :- line -> ",line.trim().red().bold());
+                                                        std::process::exit(1);
+                                                    }
+                                                }
+                                                // Add more cases as needed
+                                                _ => {}
+                                            }
+                                        }
+
+                                        last_char = Some(*cnd_char);
+                                    }
+
+                                    println!("mthd - {}", mthd);
+                                } else {
+                                    println!(
+                                        "{} {}",
+                                        "ERR - Conditional Statement syntax is wrong:".red().bold(),
+                                        line.trim().red().bold()
+                                    );
+                                    std::process::exit(1);
+                                }
                             } else if line.trim().starts_with("add") {
                                 println!("{}", "Handling addition method".green());
                                 //let mut fval = String::new();
                                 match Regex::new(r"add\((.*?)\);") {
                                     Ok(addrg) => {
-                                        println!("add regex - {:?}", addrg);
+                                        //println!("add regex - {:?}", addrg);
                                         if let Some(cap) = addrg.captures(line.trim()) {
                                             match cap.get(1) {
                                                 Some(dat) => {
@@ -195,35 +305,35 @@ fn main() {
                                                             let exprs = args.split(",");
                                                             for expr in exprs {
                                                                 let mut ex = false; // Reset ex for each expr
-                                                                dbg!(expr);
+                                                                                    // dbg!(expr);
                                                                 if expr.parse::<i128>().is_ok() {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched i128 in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    // println!(
+                                                                    //     "matched i128 in expt : {}",
+                                                                    //     expr
+                                                                    // );
                                                                 } else if expr
                                                                     .parse::<f64>()
                                                                     .is_ok()
                                                                 {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched f64 in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    // println!(
+                                                                    //     "matched f64 in expt : {}",
+                                                                    //     expr
+                                                                    // );
                                                                 } else if expr.starts_with("\"")
                                                                     && expr.ends_with("\"")
                                                                 {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched txt in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    // println!(
+                                                                    //     "matched txt in expt : {}",
+                                                                    //     expr
+                                                                    // );
                                                                 } else {
                                                                     for i in vrs.clone() {
                                                                         if i.name == expr {
                                                                             ex = true;
-                                                                            println!("matched var in expt : {}", expr);
+                                                                            // println!("matched var in expt : {}", expr);
                                                                             break;
                                                                             // Exit the loop once a match is found
                                                                         }
@@ -286,35 +396,35 @@ fn main() {
                                                             let exprs = args.split(",");
                                                             for expr in exprs {
                                                                 let mut ex = false; // Reset ex for each expr
-                                                                dbg!(expr);
+                                                                                    //dbg!(expr);
                                                                 if expr.parse::<i128>().is_ok() {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched i128 in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    //println!(
+                                                                    //    "matched i128 in expt : {}",
+                                                                    //    expr
+                                                                    //);
                                                                 } else if expr
                                                                     .parse::<f64>()
                                                                     .is_ok()
                                                                 {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched f64 in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    //println!(
+                                                                    //     "matched f64 in expt : {}",
+                                                                    //     expr
+                                                                    // );
                                                                 } else if expr.starts_with("\"")
                                                                     && expr.ends_with("\"")
                                                                 {
                                                                     ex = true;
-                                                                    println!(
-                                                                        "matched txt in expt : {}",
-                                                                        expr
-                                                                    );
+                                                                    // println!(
+                                                                    //     "matched txt in expt : {}",
+                                                                    //     expr
+                                                                    //);
                                                                 } else {
                                                                     for i in vrs.clone() {
                                                                         if i.name == expr {
                                                                             ex = true;
-                                                                            println!("matched var in expt : {}", expr);
+                                                                            //    println!("matched var in expt : {}", expr);
                                                                             break;
                                                                             // Exit the loop once a match is found
                                                                         }
